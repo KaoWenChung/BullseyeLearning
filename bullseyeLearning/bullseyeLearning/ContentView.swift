@@ -2,21 +2,22 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State var alertIsVisible: Bool = false
-    @State var sliderValue: Double = 50.0
-    @State var target:Int = Int.random(in: 1...100)
+    @State var alertIsVisible = false
+    @State var sliderValue = 50.0
+    @State var target = Int.random(in: 1...100)
+    @State var score = 0
     
     var body: some View {
         VStack {
             Spacer()
             HStack {
                 Text("Put the Bullseye as close as you can to:")
-                Text("\(self.target)")
+                Text("\(target)")
             }
             Spacer()
             HStack{
                 Text("1")
-                Slider(value: self.$sliderValue, in:1...100)
+                Slider(value: $sliderValue, in:1...100)
                 Text("100")
             }
             Button(action: {
@@ -27,9 +28,12 @@ struct ContentView: View {
             }
             .alert(isPresented: $alertIsVisible){ ()-> Alert in
                 return Alert(title: Text("Hello there!"), message: Text("The slider's value is \(sliderValueRounded()).\n" +
-                "scored \(self.pointsForCurrentRound()) points this round."
-                ), dismissButton: .default(Text("Awesome!")))
-                                               }
+                "scored \(pointsForCurrentRound()) points this round."
+                ), dismissButton: .default(Text("Awesome!")){
+                    self.score = self.score + self.pointsForCurrentRound()
+                    self.target = Int.random(in: 1...100)
+                    })
+                }
             Spacer()
             HStack{
                 Button(action:{
@@ -39,7 +43,7 @@ struct ContentView: View {
                 }
                 Spacer()
                 Text("Score:")
-                Text("999999")
+                Text("\(score)")
                 Spacer()
                 Text("Round:")
                 Text("999")
@@ -52,10 +56,10 @@ struct ContentView: View {
             }
 }
     func sliderValueRounded()->Int{
-        Int(self.sliderValue.rounded())
+        Int(sliderValue.rounded())
     }
     func pointsForCurrentRound()->Int{
-        100 - abs(self.target - sliderValueRounded())
+        100 - abs(target - sliderValueRounded())
     }
 }
 struct ContentView_Previews: PreviewProvider {
