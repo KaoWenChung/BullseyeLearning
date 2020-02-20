@@ -25,11 +25,10 @@ struct ContentView: View {
             }) {
                 Text("Hit me")
             }
-            .alert(isPresented: $alertIsVisible){ ()->
-            Alert in
-               return Alert(title: Text("Hello there!"), message: Text("The slider's value is \(self.sliderValue.rounded()).\n" +
+            .alert(isPresented: $alertIsVisible){ ()-> Alert in
+                return Alert(title: Text("Hello there!"), message: Text("The slider's value is \(sliderValueRounded()).\n" +
                 "scored \(self.pointsForCurrentRound()) points this round."
-               ), dismissButton: .default(Text("Awesome!")))
+                ), dismissButton: .default(Text("Awesome!")))
                                                }
             Spacer()
             HStack{
@@ -52,8 +51,11 @@ struct ContentView: View {
             .padding(.bottom,20)
             }
 }
+    func sliderValueRounded()->Int{
+        Int(self.sliderValue.rounded())
+    }
     func pointsForCurrentRound()->Int{
-        return 999
+        100 - abs(self.target - sliderValueRounded())
     }
 }
 struct ContentView_Previews: PreviewProvider {
