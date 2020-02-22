@@ -8,18 +8,40 @@ struct ContentView: View {
     @State var score = 0
     @State var round = 1
     
+    struct LabelStyle:ViewModifier{
+        func body(content:Content)-> some View{
+            return content
+            .foregroundColor(Color.white)
+            .modifier(Shadow())
+            .font(Font.custom("ArialRoundedMTBold" , size: 18))
+        }
+    }
+    struct ValueStyle:ViewModifier{
+        func body(content:Content)-> some View{
+            return content
+            .foregroundColor(Color.yellow)
+            .modifier(Shadow())
+            .font(Font.custom("ArialRoundedMTBold" , size: 24))
+        }
+    }
+    struct Shadow:ViewModifier{
+        func body(content:Content)-> some View{
+            return content
+            .shadow(color: Color.black, radius: 5, x: 2, y: 2)
+        }
+    }
     var body: some View {
         VStack {
             Spacer()
             HStack {
-                Text("Put the Bullseye as close as you can to: ")
-                Text("\(target)")
+                Text("Put the Bullseye as close as you can to: ").modifier(LabelStyle())
+                Text("\(target)").modifier(ValueStyle())
             }
             Spacer()
             HStack{
-                Text("1")
+                Text("1").modifier(LabelStyle())
                 Slider(value: $sliderValue, in:1...100)
-                Text("100")
+                Text("100").modifier(LabelStyle())
             }
             Spacer()
             Button(action: {
@@ -46,11 +68,11 @@ struct ContentView: View {
                     Text("Start Over")
                     }
                 Spacer()
-                Text("Score:")
-                Text("\(score)")
+                Text("Score:").modifier(LabelStyle())
+                Text("\(score)").modifier(ValueStyle())
                 Spacer()
-                Text("Round:")
-                Text("\(round)")
+                Text("Round:").modifier(LabelStyle())
+                Text("\(round)").modifier(ValueStyle())
                 Spacer()
                 Button(action:{
                     print("press Info")
@@ -58,6 +80,7 @@ struct ContentView: View {
                     }
             .padding(.bottom,20)
             }
+        .background(Image("Background"), alignment: .center)
 }
     func sliderValueRounded()->Int{
         Int(sliderValue.rounded())
